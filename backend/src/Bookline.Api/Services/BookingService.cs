@@ -3,6 +3,7 @@ using Bookline.Api.Data;
 using Bookline.Api.Domain;
 using Bookline.Api.Dtos;
 using Bookline.Api.Security;
+using Bookline.Api.Services.Payments;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookline.Api.Services;
@@ -28,6 +29,7 @@ public class BookingService(
     ITenantContext tenant,
     INotificationQueue notifications,
     IAuditService audit,
+    IPaymentProvider payments,
     TimeProvider clock,
     ILogger<BookingService> logger) : IBookingService
 {
@@ -225,7 +227,36 @@ public class BookingService(
 
         var response = await BuildResponseAsync(appointment, service, staff);
 
-        return new BookingConfirmation(response, appointment.ManagementToken, null);
+        if (!requiresPayment)
+        {
+            return new BookingConfirmation(response, appointment.ManagementToken, null);
+        }
+
+        // The slot is already held as PendingPayment, so the customer is not
+        // racing anyone while they are on the gateway's page. An abandoned
+        // checkout leaves a held slot, which is why ExpireUnpaidAsync exists.
+        var checkout = await payments.CreateCheckoutAsync(new CheckoutRequest(
+            appointment.Id,
+            appointment.ManagementToken,
+            appointment.PriceMinorUnits,
+            appointment.Currency,
+            $"{service.Name} at {business.Name}",
+            appointment.CustomerEmail), ct);
+
+        db.Payments.Add(new Payment
+        {
+            TenantId = business.Id,
+            AppointmentId = appointment.Id,
+            AmountMinorUnits = appointment.PriceMinorUnits,
+            Currency = appointment.Currency,
+            Provider = payments.Name,
+            ProviderReference = checkout.Reference,
+            Status = PaymentStatus.Pending,
+        });
+
+        await db.SaveChangesAsync(ct);
+
+        return new BookingConfirmation(response, appointment.ManagementToken, checkout.RedirectUrl);
     }
 
     public async Task CancelAsync(Appointment appointment, string? reason, string actorDescription, CancellationToken ct)

@@ -96,8 +96,15 @@ public class NotificationQueue(AppDbContext db, IOptions<NotificationOptions> op
         // Messages queued earlier in this same unit of work exist only in the
         // change tracker, so they have to be dropped separately from the ones
         // already committed to the table.
+        //
+        // Matching on the kind matters: the cancellation email is queued
+        // moments before this runs and is also unsent, so a filter of merely
+        // "unsent, for this appointment" would throw away the very message
+        // telling the customer their booking was cancelled.
         foreach (var message in db.OutboxMessages.Local
-                     .Where(m => m.AppointmentId == appointmentId && m.SentAt is null)
+                     .Where(m => m.AppointmentId == appointmentId
+                                 && m.SentAt is null
+                                 && m.Kind == NotificationKind.BookingReminder)
                      .ToList())
         {
             db.Entry(message).State = EntityState.Detached;

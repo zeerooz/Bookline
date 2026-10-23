@@ -1,0 +1,55 @@
+# Render blueprint: one web service plus a Postgres database.
+#
+# The API serves the built frontend from wwwroot, so there is no second
+# service, no cross-origin configuration, and nothing to keep in sync between
+# two URLs. See the root Dockerfile.
+#
+# To deploy: push this file, then in Render choose New → Blueprint and point
+# it at the repository. Everything below is created for you, including the
+# signing key.
+
+databases:
+  - name: bookline-db
+    databaseName: bookline
+    user: bookline
+    plan: free
+
+services:
+  - type: web
+    name: bookline
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      # Render hands out a postgres:// URL; the app translates it to the
+      # keyword form Npgsql expects. See Data/DatabaseUrl.cs.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bookline-db
+          property: connectionString
+
+      # Generated once by Render and kept across deploys. The app refuses to
+      # start if this is missing or shorter than 32 characters.
+      - key: Jwt__SigningKey
+        generateValue: true
+
+      # Defaults that need no third-party accounts: payments are simulated
+      # and email is written to the service log. Add real Stripe test keys in
+      # the Render dashboard to switch the gateway on.
+      - key: Payments__Provider
+        value: fake
+      - key: Notifications__EmailProvider
+        value: log
+
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+
+      # Render routes traffic to the port named here, and the container
+      # listens on the same one. Keeping both explicit avoids relying on
+      # port detection.
+      - key: PORT
+        value: 8080
+      - key: ASPNETCORE_HTTP_PORTS
+        value: 8080

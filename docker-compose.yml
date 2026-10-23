@@ -1,0 +1,60 @@
+name: bookline
+
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: bookline
+      POSTGRES_USER: bookline
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bookline}
+    volumes:
+      # Postgres 18 expects the mount one level up from the old data
+      # directory, so a future pg_upgrade --link can work across versions.
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U bookline -d bookline']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    # Not published: only the API needs to reach the database.
+    expose:
+      - '5432'
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: src/Bookline.Api/Dockerfile
+    environment:
+      ConnectionStrings__Postgres: Host=db;Port=5432;Database=bookline;Username=bookline;Password=${POSTGRES_PASSWORD:-bookline}
+      # Required. The app refuses to start if this is missing or under 32
+      # characters — see the README for generating one.
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?set JWT_SIGNING_KEY in .env}
+      ASPNETCORE_ENVIRONMENT: Production
+      # Defaults that need no accounts: payments are simulated and email is
+      # written to the log. Set Payments__Provider=stripe plus the keys to
+      # switch to the real gateway.
+      Payments__Provider: ${PAYMENTS_PROVIDER:-fake}
+      Payments__StripeSecretKey: ${STRIPE_SECRET_KEY:-}
+      Payments__StripeWebhookSecret: ${STRIPE_WEBHOOK_SECRET:-}
+      Notifications__EmailProvider: ${EMAIL_PROVIDER:-log}
+      # No CORS entry on purpose: the browser only ever talks to nginx, which
+      # proxies /api, so every request is same-origin.
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - '8080'
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./frontend
+    ports:
+      - '${WEB_PORT:-8081}:8080'
+    depends_on:
+      api:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  db-data:
