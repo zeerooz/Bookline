@@ -115,7 +115,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ITenantContext
             // concurrency without an extra column to maintain. Two customers
             // racing for one slot means the loser gets a concurrency failure
             // rather than a double booking.
-            e.Property(x => x.Version).IsRowVersion();
+            //
+            // xmin exists only on Postgres. On any other provider — SQLite in
+            // the integration tests — the property is dropped rather than
+            // mapped to a column nothing would ever populate.
+            if (Database.ProviderName?.Contains("Npgsql", StringComparison.Ordinal) == true)
+            {
+                e.Property(x => x.Version).IsRowVersion();
+            }
+            else
+            {
+                e.Ignore(x => x.Version);
+            }
 
             e.HasOne(x => x.Service).WithMany().HasForeignKey(x => x.ServiceId)
                 .OnDelete(DeleteBehavior.Restrict);

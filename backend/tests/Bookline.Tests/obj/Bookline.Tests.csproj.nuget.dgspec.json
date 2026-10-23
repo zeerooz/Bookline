@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\AhmedElkhawaga\\Bookline\\backend\\tests\\Bookline.Tests\\Bookline.Tests.csproj": {}
+    "C:\\AhmedElkhawaga\\Bookline\\backend\\tests\\Bookline.Tests\\Bookline.Tests.csproj": {}
   },
   "projects": {
-    "c:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj": {
+    "C:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj",
+        "projectUniqueName": "C:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj",
         "projectName": "Bookline.Api",
-        "projectPath": "c:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj",
+        "projectPath": "C:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj",
         "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "c:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\obj\\",
+        "outputPath": "C:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -518,14 +518,14 @@
         }
       }
     },
-    "c:\\AhmedElkhawaga\\Bookline\\backend\\tests\\Bookline.Tests\\Bookline.Tests.csproj": {
+    "C:\\AhmedElkhawaga\\Bookline\\backend\\tests\\Bookline.Tests\\Bookline.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\AhmedElkhawaga\\Bookline\\backend\\tests\\Bookline.Tests\\Bookline.Tests.csproj",
+        "projectUniqueName": "C:\\AhmedElkhawaga\\Bookline\\backend\\tests\\Bookline.Tests\\Bookline.Tests.csproj",
         "projectName": "Bookline.Tests",
-        "projectPath": "c:\\AhmedElkhawaga\\Bookline\\backend\\tests\\Bookline.Tests\\Bookline.Tests.csproj",
+        "projectPath": "C:\\AhmedElkhawaga\\Bookline\\backend\\tests\\Bookline.Tests\\Bookline.Tests.csproj",
         "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "c:\\AhmedElkhawaga\\Bookline\\backend\\tests\\Bookline.Tests\\obj\\",
+        "outputPath": "C:\\AhmedElkhawaga\\Bookline\\backend\\tests\\Bookline.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -541,8 +541,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "c:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj": {
-                "projectPath": "c:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj"
+              "C:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj": {
+                "projectPath": "C:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj"
               }
             }
           }
@@ -564,6 +564,18 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Mvc.Testing": {
+              "target": "Package",
+              "version": "[10.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[10.0.13, )"
+            },
+            "Microsoft.Extensions.TimeProvider.Testing": {
+              "target": "Package",
+              "version": "[10.11.0, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[17.14.1, )"

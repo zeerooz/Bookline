@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "i+74ihyEfy8=",
+  "dgSpecHash": "K+5iv3txMxs=",
   "success": true,
-  "projectFilePath": "c:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj",
+  "projectFilePath": "C:\\AhmedElkhawaga\\Bookline\\backend\\src\\Bookline.Api\\Bookline.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PC\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\10.0.13\\microsoft.aspnetcore.authentication.jwtbearer.10.0.13.nupkg.sha512",

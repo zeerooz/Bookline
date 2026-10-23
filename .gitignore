@@ -1,0 +1,42 @@
+# ---- .NET ----
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+.vs/
+artifacts/
+TestResults/
+*.trx
+coverage*.json
+coverage*.xml
+
+# ---- Node / Vite ----
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---- Secrets: never commit these ----
+# Real configuration comes from environment variables or user-secrets.
+.env
+.env.*
+!.env.example
+appsettings.Production.json
+appsettings.Local.json
+*.pfx
+*.key
+*.pem
+
+# ---- Editors / OS ----
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# ---- Local tooling output ----
+.playwright-mcp/

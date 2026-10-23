@@ -20,4 +20,11 @@
     <PackageReference Include="Stripe.net" Version="53.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- The availability engine exposes a couple of internal helpers so the
+         awkward daylight-saving cases can be tested directly, without routing
+         every assertion through the public Compute entry point. -->
+    <InternalsVisibleTo Include="Bookline.Tests" />
+  </ItemGroup>
+
 </Project>
